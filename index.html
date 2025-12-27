@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Happy Birthday 💖</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Playfair+Display:wght@500&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #fde2e4, #fadadd);
+      color: #4a4a4a;
+      overflow: hidden;
+    }
+    .slide {
+      width: 100vw;
+      height: 100vh;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      text-align: center;
+      padding: 30px;
+      animation: fade 0.8s ease;
+    }
+    .slide.active { display: flex; }
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.8rem;
+      margin-bottom: 15px;
+      color: #b23a48;
+    }
+    p {
+      font-size: 1.1rem;
+      max-width: 600px;
+      margin-bottom: 25px;
+    }
+    button {
+      background: #b23a48;
+      color: #fff;
+      border: none;
+      padding: 12px 26px;
+      border-radius: 30px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    button:hover { background: #8f2d3a; }
+
+    .surprise {
+      width: 240px;
+      height: 140px;
+      background: linear-gradient(135deg, rgba(255,182,193,0.12), rgba(255,182,193,0.04));
+      border: 1px solid rgba(255,182,193,0.25);
+      border-radius: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      color: #ffb6c1;
+      letter-spacing: 1px;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.35);
+      backdrop-filter: blur(6px);
+      cursor: pointer;
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
+    }
+
+    .surprise:hover {
+      transform: scale(1.05);
+      box-shadow: 0 18px 55px rgba(255,182,193,0.25);
+    }
+
+    .hidden-message {
+      display: none;
+      margin-top: 20px;
+      font-style: italic;
+      color: #b23a48;
+    }
+
+    @keyframes fade {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .heart {
+      position: fixed;
+      bottom: -20px;
+      font-size: 20px;
+      animation: floatUp 6s linear forwards;
+      opacity: 0.8;
+    }
+    @keyframes floatUp {
+      0% { transform: translateY(0) scale(1); opacity: 1; }
+      100% { transform: translateY(-110vh) scale(1.5); opacity: 0; }
+    }
+
+    .night {
+      background: linear-gradient(135deg, #1a1a2e, #16213e);
+      color: #f2f2f2;
+    }
+    .night h1 { color: #ffb6c1; }
+    .night button { background: #ffb6c1; color: #1a1a2e; }
+  </style>
+</head>
+<body class="night">
+
+<!-- Audio element -->
+<audio id="bgm" preload="auto">
+  <source src="birthday-surprise/dooron-dooron.mp3" type="audio/mpeg">
+  Your browser does not support the audio element.
+</audio>
+
+<!-- Slide 1 -->
+<div class="slide active">
+  <h1>Hey Shizuka 🌸</h1>
+  <p>Today is not just another day… it's the day someone incredibly special was born.</p>
+  <button onclick="startBirthday()">Start Birthday Surprise 🎵</button>
+</div>
+
+<!-- Slide 2 -->
+<div class="slide">
+  <h1>Happy Birthday Shizuka 🎂</h1>
+  <p>May your life be filled with soft moments, big dreams, and endless smiles.</p>
+  <button onclick="nextSlide()">Next 💕</button>
+</div>
+
+<!-- Slide 3 -->
+<div class="slide">
+  <h1>A Little Note 💌</h1>
+  <p>You bring warmth, kindness, and positivity wherever you go — and that makes you rare.</p>
+  <button onclick="nextSlide()">Open a Surprise 🎁</button>
+</div>
+
+<!-- Slide 4 (Interactive Surprise) -->
+<div class="slide">
+  <h1>Tap the Card 💗</h1>
+  <div class="surprise" id="surpriseCard" onclick="revealMessage()">Click Me ✨</div>
+  <div class="hidden-message" id="msg">You are appreciated more than words can ever express 💕</div>
+  <button id="nextBtn" style="margin-top:20px; display:none;" onclick="nextSlide()">Next 💖</button>
+</div>
+
+<!-- Slide 5 -->
+<div class="slide">
+  <h1>Always Remember 🌙</h1>
+  <p>You deserve love, respect, success, and all the happiness in the world.</p>
+  <button onclick="nextSlide()">Final Surprise 🌸</button>
+</div>
+
+<!-- Slide 6 -->
+<div class="slide">
+  <h1>Almost There 💫</h1>
+  <p>One last thing is waiting for you… only if you really want to see it 👀</p>
+  <button onclick="nextSlide()">Reveal Secret 🔐</button>
+</div>
+
+<!-- Slide 7 (Secret) -->
+<div class="slide">
+  <h1>Secret Surprise 💖</h1>
+  <p>Shizuka, you are genuinely special. Never doubt your worth — you light up lives, silently and beautifully 🌸</p>
+  <p style="margin-top:15px;font-style:italic;">Happy Birthday, once again ✨</p>
+</div>
+
+<script>
+let current = 0;
+const slides = document.querySelectorAll('.slide');
+const audio = document.getElementById('bgm');
+const START_TIME = 18;
+
+// Start birthday: plays music and goes to next slide
+function startBirthday() {
+  audio.currentTime = START_TIME;
+  audio.volume = 0.6;
+  audio.play().catch(()=>{});
+  nextSlide();
+}
+
+// Normal slide navigation
+function nextSlide() {
+  slides[current].classList.remove('active');
+  current = (current + 1) % slides.length;
+  slides[current].classList.add('active');
+  audio.currentTime = START_TIME;
+  audio.volume = 0.6;
+  audio.play().catch(()=>{});
+}
+
+// Reveal message in Slide 4
+function revealMessage() {
+  const card = document.getElementById('surpriseCard');
+  const msg = document.getElementById('msg');
+  const nextBtn = document.getElementById('nextBtn');
+  msg.style.display = 'block';
+  card.innerText = '💖';
+  card.style.pointerEvents = 'none';
+  nextBtn.style.display = 'inline-block';
+}
+
+// Floating hearts
+setInterval(() => {
+  const heart = document.createElement('div');
+  heart.className = 'heart';
+  heart.innerText = ['💖','💗','💘','💕','🌸'][Math.floor(Math.random()*5)];
+  heart.style.left = Math.random() * 100 + 'vw';
+  heart.style.animationDuration = (4 + Math.random()*3) + 's';
+  document.body.appendChild(heart);
+  setTimeout(() => heart.remove(), 7000);
+}, 600);
+</script>
+
+</body>
+</html>
