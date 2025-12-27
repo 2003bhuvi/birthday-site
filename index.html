@@ -106,7 +106,7 @@
 <body class="night">
 
 <!-- Audio element -->
-<audio id="bgm" preload="auto">
+<!-- <audio id="bgm" preload="auto">
   <source src="dooron-dooron.mp3" type="audio/mpeg">
 </audio>
 
@@ -167,12 +167,12 @@ const audio = document.getElementById('bgm');
 const START_TIME = 18;
 
 // Start birthday: plays music and goes to next slide
-function startBirthday() {
-  audio.currentTime = START_TIME;
-  audio.volume = 0.6;
-  audio.play().catch(()=>{});
-  nextSlide();
-}
+//function startBirthday() {
+//  audio.currentTime = START_TIME;
+//  audio.volume = 0.6;
+//  audio.play().catch(()=>{});
+ // nextSlide();
+//}
 
 // Normal slide navigation
 function nextSlide() {
@@ -209,4 +209,5 @@ setInterval(() => {
 
 </body>
 </html>
+
 
